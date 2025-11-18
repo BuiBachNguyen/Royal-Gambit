@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Unity.Jobs;
 using UnityEngine;
@@ -20,6 +20,7 @@ public abstract class Piece : MonoBehaviour, IPointerClickHandler
     [SerializeField] protected BoardPosition pos;
     [SerializeField] protected bool hasMoved = false;
     [SerializeField] protected BoardManager board;
+
     protected bool isOnClick;
 
     #region Getter Setter
@@ -40,6 +41,9 @@ public abstract class Piece : MonoBehaviour, IPointerClickHandler
     }
     #endregion
 
+
+    public static event Action<Piece, PointerEventData> OnAnyPieceClicked;
+
     private void Start()
     {
         board = FindAnyObjectByType<BoardManager>();
@@ -54,7 +58,12 @@ public abstract class Piece : MonoBehaviour, IPointerClickHandler
     //}
 
     //// Return all pseudo-legal moves (not filtering out leaving own king in check)
-    public abstract List<Move> GeneratePseudoLegalMoves();
+    public virtual List<Move> GeneratePseudoLegalMoves()
+    {
+        if (DEBUG.isLogicDebuging || DEBUG.overviewDebug) 
+            Debug.Log("Lấy piece, gọi return legl move List move");
+        return null;
+    }    
 
     //// helper: ensure move inside board
     //protected bool InBounds(int x, int y) => x >= 0 && x < 8 && y >= 0 && y < 8;
@@ -132,30 +141,32 @@ public abstract class Piece : MonoBehaviour, IPointerClickHandler
     //Click on Tile has piece
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("CLICK r");
-        if (tile == null || board == null) return;
-        if (board.PickingPiece == null)
-        {
-            this.isOnClick = true;
-            this.Tile.Highlight(isOnClick);
-            board.PickingPiece = this;
-        }
-        else if (board.PickingPiece == this)
-        {
-            this.isOnClick = !isOnClick;
-            this.Tile.Highlight(isOnClick);
-            board.PickingPiece = isOnClick ? this : null;
-        }
-        else if (board.PickingPiece != this)
-        {
-            //clear old piece and tile
-            board.PickingPiece.Tile.Highlight(false);
-            board.PickingPiece.isOnClick = false;
-            //Set for new piece
-            this.isOnClick = true;
-            this.Tile.Highlight(true);
-            board.PickingPiece = this;
-        }
+        //Debug.Log("CLICK r");
+        //if (tile == null || board == null) return;
+        //if (board.PickingPiece == null)
+        //{
+        //    this.isOnClick = true;
+        //    this.Tile.Highlight(isOnClick);
+        //    board.PickingPiece = this;
+        //}
+        //else if (board.PickingPiece == this)
+        //{
+        //    this.isOnClick = !isOnClick;
+        //    this.Tile.Highlight(isOnClick);
+        //    board.PickingPiece = isOnClick ? this : null;
+        //}
+        //else if (board.PickingPiece != this)
+        //{
+        //    //clear old piece and tile
+        //    board.PickingPiece.Tile.Highlight(false);
+        //    board.PickingPiece.isOnClick = false;
+        //    //Set for new piece
+        //    this.isOnClick = true;
+        //    this.Tile.Highlight(true);
+        //    board.PickingPiece = this;
+        //}
+        // Báo cho mọi Observer biết quân này bị click
+        OnAnyPieceClicked?.Invoke(this, eventData);
     }
 
     public void MoveTo(Tile targetTile)

@@ -95,6 +95,9 @@ MonoBehaviour:
     x: 0
     y: 0
   occupying: {fileID: 0}
+  status: 0
+  tileColor: 0
+  data: {fileID: 11400000, guid: c3cd9d7bc5d4eb449a36ee20dd34e995, type: 2}
 --- !u!223 &8498804548690077413
 Canvas:
   m_ObjectHideFlags: 0
@@ -109,7 +112,7 @@ Canvas:
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
-  m_OverrideSorting: 0
+  m_OverrideSorting: 1
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0

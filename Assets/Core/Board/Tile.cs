@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
 
 [System.Serializable]
 public struct BoardPosition
@@ -34,58 +33,50 @@ public class Tile : MonoBehaviour, IPointerClickHandler
     [SerializeField] BoardManager boardManager;
     [SerializeField] BoardPosition pos;
     [SerializeField] Piece occupying;
-    private Image img;
 
-    public virtual void Initialize(BoardManager boardManager, BoardPosition pos, Piece occupying = null, Color? baseColor = null)
+    [SerializeField] ItemSpriteDatabase data; // return right img with Status and corlor
+    [SerializeField] TileStatus status = TileStatus.NoAct;
+    [SerializeField] TileColor tileColor;
+    [SerializeField] Image img;
+
+
+    public virtual void Initialize(
+        BoardManager boardManager, 
+        BoardPosition pos, 
+        Piece occupying = null, 
+        TileStatus status = TileStatus.NoAct)
     {
         this.boardManager = boardManager;
         this.pos = pos;
         this.occupying = occupying;
-        img = GetComponent<Image>();
-
-        if (img != null)
-        {
-            img.color = baseColor ?? GetDefaultColor(pos);
-        }
+        this.status = status;
     }
     void Awake()
     {
-        if (img == null)
-        {
-            img = GetComponent<Image>();
-        }
-        img.color = GetDefaultColor(pos);
+        img = GetComponent<Image>();
     }
-    //This is hardcode color, đont do like this
-    private Color GetDefaultColor(BoardPosition pos)
+    void Start()
     {
-        return ((pos.x + pos.y) % 2 == 0)
-            ? new Color(0.9f, 0.9f, 0.9f)   // WhiteClay
-            : new Color(0.2f, 0.2f, 0.2f);  // DarkGrey
+        this.tileColor = GetTileColor();
+        if (img != null)
+            img.sprite = data.GetSprite(status, tileColor);
     }
 
-    public void Highlight(bool on)
+    public TileColor GetTileColor()
     {
-        if (img == null)
-            img = GetComponent<Image>();
-
-        if (on)
-            img.color = Color.green; // the same too
+        int sum = pos.x + pos.y;
+        if(sum % 2 == 0)
+            return TileColor.White;
         else
-            img.color = GetDefaultColor(pos);
-    }
-    public void HighLightCheckmate(bool on)
-    {
-        if (img == null)
-            img = GetComponent<Image>();
-
-        if (on)
-            img.color = Color.red; //Another 
-        else
-            img.color = GetDefaultColor(pos);
-    }
-
+            return TileColor.Black;
+    }    
     public BoardPosition GetBoardPotition() => pos;
+
+
+    public void ChangeStatus(TileStatus newtatus)
+    {
+        this.status = newtatus;
+    }    
 
     public void PlacePiece(Piece piece)
     {
@@ -98,8 +89,8 @@ public class Tile : MonoBehaviour, IPointerClickHandler
         piece.transform.SetParent(this.transform, false);
         piece.transform.SetAsLastSibling();
         RectTransform pieceRect = piece.GetComponent<RectTransform>();
-        pieceRect.anchorMin = new Vector2(0.5f, 0.5f);
-        pieceRect.anchorMax = new Vector2(0.5f, 0.5f);
+        pieceRect.anchorMin = new Vector2(0, 0);
+        pieceRect.anchorMax = new Vector2(1, 1);
         pieceRect.anchoredPosition = Vector2.zero;
     }
 
@@ -118,15 +109,6 @@ public class Tile : MonoBehaviour, IPointerClickHandler
 
         if (boardManager.PickingPiece == null) return;
 
-        List<Move> legalMoves = boardManager.PickingPiece.GeneratePseudoLegalMoves();
-
-        foreach (Move move in legalMoves)
-        {
-            if (move.from == boardManager.PickingPiece.Pos && this.pos == move.to)
-            {
-                boardManager.HandleMove(this, move);
-                return;
-            }
-        }
+        boardManager.HandleMove(this, boardManager.PickingPiece);
     }
 }

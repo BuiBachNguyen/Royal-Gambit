@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d85a30a52c74dcc418f3c355a365fa2e, type: 3}
+  m_Name: TileSpriteDatabase
+  m_EditorClassIdentifier: 
+  items:
+  - status: 0
+    color: 0
+    sprite: {fileID: 9018902228832269529, guid: 184845150c438844595bbc3590d1dd13, type: 3}
+  - status: 1
+    color: 0
+    sprite: {fileID: -7950051484100370712, guid: 79215e7dbf1955247adaab3497d96be7, type: 3}
+  - status: 2
+    color: 0
+    sprite: {fileID: -6972926143939119343, guid: 15d81c6269eeb104c8cb87dad9727901, type: 3}
+  - status: 0
+    color: 1
+    sprite: {fileID: 2803790728184767586, guid: 306c780aafb55fa41b0dcadd0596f5b4, type: 3}
+  - status: 1
+    color: 1
+    sprite: {fileID: 3626725153003695186, guid: 242486458d3b5e746a49a7a12eea1bb1, type: 3}
+  - status: 2
+    color: 1
+    sprite: {fileID: 1462063911753566974, guid: c0e5cadcbb8b7d14382ab650c7f89909, type: 3}

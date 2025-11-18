@@ -1,5 +1,7 @@
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 // Main board manager: keeps 8x8 piece data, handles turn, generates legal moves,
 // checks for check/checkmate, and tracks last move for en passant.
@@ -273,16 +275,59 @@ public class BoardManager : MonoBehaviour
 
     #endregion
 
-    public void HandleMove(Tile targetTile, Move move)
+    
+
+    private void OnEnable()
     {
-        if (pickingPiece == null) return;
+        // Đăng ký lắng nghe sự kiện click quân cờ
+        Piece.OnAnyPieceClicked += HandlePieceClick;
+    }
+
+    private void OnDisable()
+    {
+        // Hủy đăng ký khi disable tránh leak
+        Piece.OnAnyPieceClicked -= HandlePieceClick;
+    }
+
+    private void HandlePieceClick(Piece clickedPiece, PointerEventData eventData)
+    {
+        if (DEBUG.isLogicDebuging || DEBUG.overviewDebug)
+            Debug.Log($"BoardManager nhận được click từ {clickedPiece.name}");
+        
+        if (pickingPiece != null)
+        {
+            pickingPiece = null;
+            return;
+        } 
+        //Gán  picking piece các thứ nhé
+        pickingPiece = clickedPiece;
+            
+
+        List<Move> moves = clickedPiece.GeneratePseudoLegalMoves();
+
+        //if (moves == null) return;
+        Board.Instance.ChangeStatusTiles(moves, TileStatus.Act);
+
+
+
+        // Ở đây xử lý logic:
+        // Nếu chưa có quân được chọn -> chọn quân này
+        // Nếu đã chọn quân -> thử di chuyển đến tile được click
+        // v.v...
+    }
+
+
+    public void HandleMove(Tile targetTile, Piece piece)
+    {
+        //if (pickingPiece == null) return;
 
         pickingPiece.MoveTo(targetTile);
         SetPieceAt(targetTile.GetBoardPotition(), pickingPiece);
 
-        pickingPiece.Tile.Highlight(false);
+        //pickingPiece.Tile.Highlight(false);
         pickingPiece = null;
 
+        Board.Instance.ChangeStatusTiles(null, TileStatus.NoAct);
     }    
 
     public void SetPieceAt(BoardPosition pos, Piece p)
@@ -296,4 +341,5 @@ public class BoardManager : MonoBehaviour
         if (!pos.InBounds()) return null;
         return pieces[pos.x, pos.y];
     }
+
 }
