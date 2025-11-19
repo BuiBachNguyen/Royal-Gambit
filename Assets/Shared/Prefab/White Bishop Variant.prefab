@@ -10,12 +10,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4292472561455509920, guid: fa5597634db440c4692e1d2098168ab4, type: 3}
       propertyPath: m_Name
-      value: Black Bishop Variant
+      value: White Bishop Variant
       objectReference: {fileID: 0}
     - target: {fileID: 8031352983937641696, guid: fa5597634db440c4692e1d2098168ab4, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -6414592721767173361, guid: 47059ba933bfc3b4a9ecaac1a51a0cb9, type: 3}
+      objectReference: {fileID: 7560534232159598683, guid: 74b68101864dace4a9295f3adea02132, type: 3}
     - target: {fileID: 8640622835792181960, guid: fa5597634db440c4692e1d2098168ab4, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -121,3 +121,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43195d15444d9d488f2463366eebb56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: 0
+  tile: {fileID: 0}
+  pos:
+    x: 0
+    y: 0
+  hasMoved: 0
+  board: {fileID: 0}

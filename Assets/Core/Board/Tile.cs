@@ -92,6 +92,8 @@ public class Tile : MonoBehaviour, IPointerClickHandler
         pieceRect.anchorMin = new Vector2(0, 0);
         pieceRect.anchorMax = new Vector2(1, 1);
         pieceRect.anchoredPosition = Vector2.zero;
+        pieceRect.sizeDelta = Vector2.zero;
+
     }
 
     public void RemovePiece()

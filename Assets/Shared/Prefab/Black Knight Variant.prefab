@@ -121,3 +121,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19ab9e4fc275d84b9fda3e18ada3a65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: 1
+  tile: {fileID: 0}
+  pos:
+    x: 0
+    y: 0
+  hasMoved: 0
+  board: {fileID: 0}

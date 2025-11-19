@@ -1,16 +1,15 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Pawn : MonoBehaviour
+public class Pawn : Piece
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override List<Move> GeneratePseudoLegalMoves()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        List<Move> result = new List<Move>();
+        result.Add(new Move(this.Pos, new BoardPosition(pos.x + 1, pos.y)));
+        result.Add(new Move(this.Pos, new BoardPosition(pos.x - 1, pos.y)));
+        result.Add(new Move(this.Pos, new BoardPosition(pos.x, pos.y + 1)));
+        result.Add(new Move(this.Pos, new BoardPosition(pos.x, pos.y - 1)));
+        return result;
     }
 }

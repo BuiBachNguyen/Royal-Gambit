@@ -6,16 +6,15 @@ public class ItemSpriteDatabase : ScriptableObject
     public ItemSpriteData[] items;
 
     /// <summary>
-    /// Trả về Sprite tương ứng với TileStatus và TileColor đã cho.
+    /// Return matching Sprite with TileStatus and TileCorlor
     /// </summary>
-    /// <param name="status">Trạng thái của ô cờ.</param>
-    /// <param name="color">Màu của ô cờ (White/Black).</param>
-    /// <returns>Sprite tương ứng, hoặc null nếu không tìm thấy.</returns>
+    /// <param name="status">Status of tile</param>
+    /// <param name="color">Color of pieces (White/Black).</param>
+    /// <returns>Matched Sprite or null if not found .</returns>
     public Sprite GetSprite(TileStatus status, TileColor color)
     {
         foreach (var item in items)
         {
-            // Kiểm tra cả trạng thái VÀ màu
             if (item.status == status && item.color == color)
                 return item.sprite;
         }
@@ -32,7 +31,6 @@ public enum TileStatus
     CheckMate
 }
 
-// Enum mới cho màu ô cờ
 public enum TileColor
 {
     White,
@@ -45,6 +43,6 @@ public enum TileColor
 public class ItemSpriteData
 {
     public TileStatus status;
-    public TileColor color; // Thêm trường màu
+    public TileColor color; 
     public Sprite sprite;
 }
