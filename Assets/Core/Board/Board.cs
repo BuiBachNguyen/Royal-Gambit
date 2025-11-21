@@ -64,7 +64,8 @@ public class Board : MonoBehaviour
             }
         }
 
-        SpawnPieces();
+        //SpawnPieces();
+        LoadFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
     }
 
 
@@ -75,7 +76,7 @@ public class Board : MonoBehaviour
 
         tile.PlacePiece(p);
 
-        p.MoveTo(tile);
+        p.MoveTo(tile, false);
     }
 
     void SpawnPieces()
@@ -113,16 +114,10 @@ public class Board : MonoBehaviour
 
     public void ChangeStatusTiles(List<Move> moves, TileStatus tileStatus)
     {
+        ResetTiles();
 
         if (moves == null)
         {
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    board[i, j].ChangeStatus(TileStatus.NoAct);
-                }
-            }
             return;
         }
 
@@ -135,5 +130,73 @@ public class Board : MonoBehaviour
 
             board[move.to.x, move.to.y].ChangeStatus(tileStatus);
         }
+    }
+
+    public void ResetTiles()
+    {
+        for(int i = 0;i < 8;i++)
+        {
+            for(int j = 0; j < 8;j++)
+            {
+                board[i, j].ChangeStatus(TileStatus.NoAct);
+            }    
+        }    
+    }
+
+
+    //TRY USING FEN
+    public void LoadFEN(string fen)
+    {
+        string[] parts = fen.Split(' ');
+        string boardData = parts[0];
+
+        int row = 7;
+        int col = 0;
+
+        foreach (char c in boardData)
+        {
+            if (c == '/')
+            {
+                row--;
+                col = 0;
+                continue;
+            }
+
+            if (char.IsDigit(c))
+            {
+                col += (c - '0');
+            }
+            else
+            {
+                PlacePieceFromSymbol(c, row, col);
+                col++;
+            }
+        }
+    }
+
+    void PlacePieceFromSymbol(char symbol, int row, int col)
+    {
+        Piece prefab = GetPrefabFromSymbol(symbol);
+        if (prefab == null)
+            return;
+
+        CreatePiece(prefab, row, col);
+    }
+
+    Piece GetPrefabFromSymbol(char c)
+    {
+        bool isWhite = char.IsUpper(c);
+        char p = char.ToLower(c);
+
+        return p switch
+        {
+            'k' => isWhite ? kingWhite : kingBlack,
+            'q' => isWhite ? queenWhite : queenBlack,
+            'r' => isWhite ? rookWhite : rookBlack,
+            'b' => isWhite ? bishopWhite : bishopBlack,
+            'n' => isWhite ? knightWhite : knightBlack,
+            'p' => isWhite ? pawnWhite : pawnBlack,
+            _ => null
+        };
     }
 }

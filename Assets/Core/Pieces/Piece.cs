@@ -169,11 +169,11 @@ public abstract class Piece : MonoBehaviour, IPointerClickHandler
         OnAnyPieceClicked?.Invoke(this, eventData);
     }
 
-    public void MoveTo(Tile targetTile)
+    public void MoveTo(Tile targetTile, bool hasMove = true)
     {
         if (tile != null)
             tile.RemovePiece();
-
+        this.hasMoved = hasMove;
         targetTile.PlacePiece(this);
     }
 

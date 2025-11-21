@@ -294,11 +294,11 @@ public class BoardManager : MonoBehaviour
         if (DEBUG.isLogicDebuging || DEBUG.overviewDebug)
             Debug.Log($"BoardManager nhận được click từ {clickedPiece.name}");
         
-        if (pickingPiece != null)
-        {
-            pickingPiece = null;
-            return;
-        } 
+        //if (pickingPiece != null)
+        //{
+        //    pickingPiece = null;
+        //    return;
+        //} 
         //Gán  picking piece các thứ nhé
         pickingPiece = clickedPiece;
             

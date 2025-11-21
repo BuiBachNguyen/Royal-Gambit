@@ -66,9 +66,9 @@ public class Tile : MonoBehaviour, IPointerClickHandler
     {
         int sum = pos.x + pos.y;
         if(sum % 2 == 0)
-            return TileColor.White;
-        else
             return TileColor.Black;
+        else
+            return TileColor.White;
     }    
     public BoardPosition GetBoardPotition() => pos;
 
@@ -76,6 +76,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
     public void ChangeStatus(TileStatus newtatus)
     {
         this.status = newtatus;
+        img.sprite = data.GetSprite(newtatus, GetTileColor());
     }    
 
     public void PlacePiece(Piece piece)
@@ -111,6 +112,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
 
         if (boardManager.PickingPiece == null) return;
 
-        boardManager.HandleMove(this, boardManager.PickingPiece);
+        if(this.status == TileStatus.Act)
+            boardManager.HandleMove(this, boardManager.PickingPiece);
     }
 }
