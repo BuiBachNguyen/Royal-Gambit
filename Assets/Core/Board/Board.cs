@@ -5,23 +5,13 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
+    [SerializeField] private PiecePrefabLibrary prefabLibrary;
+    public PiecePrefabLibrary PrefabLibrary => prefabLibrary;
+
     [SerializeField] Tile tilePrefab;
     [SerializeField] BoardManager boardManager;
     [SerializeField] Tile[,] board;
 
-    [SerializeField] private Piece kingWhite;
-    [SerializeField] private Piece queenWhite;
-    [SerializeField] private Piece rookWhite;
-    [SerializeField] private Piece bishopWhite;
-    [SerializeField] private Piece knightWhite;
-    [SerializeField] private Piece pawnWhite;
-
-    [SerializeField] private Piece kingBlack;
-    [SerializeField] private Piece queenBlack;
-    [SerializeField] private Piece rookBlack;
-    [SerializeField] private Piece bishopBlack;
-    [SerializeField] private Piece knightBlack;
-    [SerializeField] private Piece pawnBlack;
 
     #region Singleton
     public static Board Instance { get; private set; }
@@ -68,48 +58,15 @@ public class Board : MonoBehaviour
         LoadFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
     }
 
-
-    void CreatePiece(Piece prefab, int row, int col)
+    void CreatePiece(PieceType type, PlayerColor color, int row, int col)
     {
-        Piece p = Instantiate(prefab);
+        Piece piece = Instantiate(prefabLibrary.GetPrefab(type, color));
+        if (piece == null) return;
+
         Tile tile = board[row, col];
-
-        tile.PlacePiece(p);
-
-        p.MoveTo(tile, false);
+        tile.PlacePiece(piece);
+        piece.MoveTo(tile, false);
     }
-
-    void SpawnPieces()
-    {
-        // Black major pieces (row 0)
-        CreatePiece(rookBlack, 0, 0);
-        CreatePiece(knightBlack, 0, 1);
-        CreatePiece(bishopBlack, 0, 2);
-        CreatePiece(queenBlack, 0, 3);
-        CreatePiece(kingBlack, 0, 4);
-        CreatePiece(bishopBlack, 0, 5);
-        CreatePiece(knightBlack, 0, 6);
-        CreatePiece(rookBlack, 0, 7);
-
-        // Black pawns (row 1)
-        for (int j = 0; j < 8; j++)
-            CreatePiece(pawnBlack, 1, j);
-
-        // White pawns (row 6)
-        for (int j = 0; j < 8; j++)
-            CreatePiece(pawnWhite, 6, j);
-
-        // White major pieces (row 7)
-        CreatePiece(rookWhite, 7, 0);
-        CreatePiece(knightWhite, 7, 1);
-        CreatePiece(bishopWhite, 7, 2);
-        CreatePiece(queenWhite, 7, 3);
-        CreatePiece(kingWhite, 7, 4);
-        CreatePiece(bishopWhite, 7, 5);
-        CreatePiece(knightWhite, 7, 6);
-        CreatePiece(rookWhite, 7, 7);
-    }
-
 
 
     public void ChangeStatusTiles(List<Move> moves, TileStatus tileStatus)
@@ -176,27 +133,27 @@ public class Board : MonoBehaviour
 
     void PlacePieceFromSymbol(char symbol, int row, int col)
     {
-        Piece prefab = GetPrefabFromSymbol(symbol);
-        if (prefab == null)
-            return;
+        bool isWhite = char.IsUpper(symbol);
+        char lower = char.ToLower(symbol);
 
-        CreatePiece(prefab, row, col);
-    }
-
-    Piece GetPrefabFromSymbol(char c)
-    {
-        bool isWhite = char.IsUpper(c);
-        char p = char.ToLower(c);
-
-        return p switch
+        PieceType type = lower switch
         {
-            'k' => isWhite ? kingWhite : kingBlack,
-            'q' => isWhite ? queenWhite : queenBlack,
-            'r' => isWhite ? rookWhite : rookBlack,
-            'b' => isWhite ? bishopWhite : bishopBlack,
-            'n' => isWhite ? knightWhite : knightBlack,
-            'p' => isWhite ? pawnWhite : pawnBlack,
-            _ => null
+            'p' => PieceType.Pawn,
+            'r' => PieceType.Rook,
+            'n' => PieceType.Knight,
+            'b' => PieceType.Bishop,
+            'q' => PieceType.Queen,
+            'k' => PieceType.King,
+            _ => throw new System.Exception("Unknown piece symbol: " + symbol)
         };
+
+        CreatePiece(type, isWhite ? PlayerColor.White : PlayerColor.Black, row, col);
     }
+
+    public Tile GetTile(int x, int y)
+    {
+        return board[x, y];
+    }
+
+
 }

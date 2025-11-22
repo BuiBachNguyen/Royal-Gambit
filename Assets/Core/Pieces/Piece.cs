@@ -9,6 +9,16 @@ public enum PlayerColor
     White,
     Black
 }
+public enum PieceType
+{
+    Pawn,
+    Knight,
+    Bishop,
+    Rook,
+    Queen,
+    King
+}
+
 
 
 // Base class for all pieces. Not MonoBehaviour if you prefer pure data,
@@ -16,10 +26,11 @@ public enum PlayerColor
 public abstract class Piece : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] protected PlayerColor color;
+    [SerializeField] protected PieceType pieceType;
     [SerializeField] protected Tile tile;
     [SerializeField] protected BoardPosition pos;
     [SerializeField] protected bool hasMoved = false;
-    [SerializeField] protected BoardManager board;
+    [SerializeField] protected BoardManager boardManager;
 
     protected bool isOnClick;
 
@@ -29,6 +40,12 @@ public abstract class Piece : MonoBehaviour, IPointerClickHandler
         get { return tile; }
         set { tile = value; }
     }
+    public PieceType PieceType => pieceType;
+    public PlayerColor Color
+    {
+        get { return color; }
+        set { color = value; }
+    }    
     public BoardPosition Pos
     {
         get { return pos; }
@@ -46,7 +63,7 @@ public abstract class Piece : MonoBehaviour, IPointerClickHandler
 
     private void Start()
     {
-        board = FindAnyObjectByType<BoardManager>();
+        boardManager = FindAnyObjectByType<BoardManager>();
     }
 
     //public virtual void Initialize(BoardManager boardManager, PlayerColor color, BoardPosition pos)
@@ -141,32 +158,9 @@ public abstract class Piece : MonoBehaviour, IPointerClickHandler
     //Click on Tile has piece
     public void OnPointerClick(PointerEventData eventData)
     {
-        //Debug.Log("CLICK r");
-        //if (tile == null || board == null) return;
-        //if (board.PickingPiece == null)
-        //{
-        //    this.isOnClick = true;
-        //    this.Tile.Highlight(isOnClick);
-        //    board.PickingPiece = this;
-        //}
-        //else if (board.PickingPiece == this)
-        //{
-        //    this.isOnClick = !isOnClick;
-        //    this.Tile.Highlight(isOnClick);
-        //    board.PickingPiece = isOnClick ? this : null;
-        //}
-        //else if (board.PickingPiece != this)
-        //{
-        //    //clear old piece and tile
-        //    board.PickingPiece.Tile.Highlight(false);
-        //    board.PickingPiece.isOnClick = false;
-        //    //Set for new piece
-        //    this.isOnClick = true;
-        //    this.Tile.Highlight(true);
-        //    board.PickingPiece = this;
-        //}
         // Báo cho mọi Observer biết quân này bị click
         OnAnyPieceClicked?.Invoke(this, eventData);
+        this.tile.OnPointerClick(eventData);
     }
 
     public void MoveTo(Tile targetTile, bool hasMove = true)
@@ -182,3 +176,4 @@ public abstract class Piece : MonoBehaviour, IPointerClickHandler
         throw new NotImplementedException();
     }
 }
+

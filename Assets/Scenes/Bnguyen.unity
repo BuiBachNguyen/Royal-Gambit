@@ -610,20 +610,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 740b2abcfbca5544ba900ec0a0095edc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabLibrary: {fileID: 11400000, guid: a179d39a42916d84daf8ddabcb3bf918, type: 2}
   tilePrefab: {fileID: 5009351470803523697, guid: 29a3c7ba315ca744db8995fe659bb65a, type: 3}
   boardManager: {fileID: 1497701436}
-  kingWhite: {fileID: 8590215219200429175, guid: 132a8ee4de2c1ea49b100701dcf6a519, type: 3}
-  queenWhite: {fileID: 6745253262581834631, guid: 2064cca5b0ce105468e40d3f3a067834, type: 3}
-  rookWhite: {fileID: 8705245071191467148, guid: bb4bac18d3985854389f3163be551453, type: 3}
-  bishopWhite: {fileID: 7646106853778182640, guid: 2db1739147117f74e9b7fa8b65cd48d4, type: 3}
-  knightWhite: {fileID: 526708420574085805, guid: ad37a55972ddcd546980ac452265a26e, type: 3}
-  pawnWhite: {fileID: 5540482213076666654, guid: b669fab9a7480aa4b8e7a5c7ac539eb4, type: 3}
-  kingBlack: {fileID: 8590215219200429175, guid: 49c53aa7cfc55644eb01759dbf34d577, type: 3}
-  queenBlack: {fileID: 1358187011160339284, guid: 8cd593a4cc8b33340b1b4e626145c47c, type: 3}
-  rookBlack: {fileID: 7459759547698773993, guid: 1a991f5ed49bb2a49b354ddb12623434, type: 3}
-  bishopBlack: {fileID: 7646106853778182640, guid: d6797b22b4266f745b22ff766cc1cd36, type: 3}
-  knightBlack: {fileID: 7923631422676831067, guid: 5d6c1892f90766244864e0974b396211, type: 3}
-  pawnBlack: {fileID: 3100057979921173109, guid: 4665d9bb00d9f0e42bd4f2981c71e84f, type: 3}
 --- !u!114 &1929498852
 MonoBehaviour:
   m_ObjectHideFlags: 0
