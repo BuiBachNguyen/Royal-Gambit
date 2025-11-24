@@ -346,23 +346,34 @@ public class BoardManager : MonoBehaviour
 
     private void HandleCastling(Move mv)
     {
-        int row = mv.from.x; // x = hàng
-        // King side
+        int row = mv.from.x;
+        Piece rook = null;
+        BoardPosition rookFromPos;
+        BoardPosition rookToPos;
+
+        // King side castling
         if (mv.to.y == 6)
         {
-            Piece rook = GetPieceAt(new BoardPosition(row, 7));
-            rook.MoveTo(Board.Instance.GetTile(row, 5));
-            SetPieceAt(new BoardPosition(row, 5), rook);
-            SetPieceAt(new BoardPosition(row, 7), null);
+            rookFromPos = new BoardPosition(row, 7);
+            rookToPos = new BoardPosition(row, 5);
         }
-        // Queen side
+        // Queen side castling
         else if (mv.to.y == 2)
         {
-            Piece rook = GetPieceAt(new BoardPosition(row, 0));
-            rook.MoveTo(Board.Instance.GetTile(row, 3));
-            SetPieceAt(new BoardPosition(row, 3), rook);
-            SetPieceAt(new BoardPosition(row, 0), null);
+            rookFromPos = new BoardPosition(row, 0);
+            rookToPos = new BoardPosition(row, 3);
         }
+        else
+        {
+            return;
+        }
+
+        rook = GetPieceAt(rookFromPos);
+        if (rook == null) return;
+
+        SetPieceAt(rookFromPos, null);
+        SetPieceAt(rookToPos, rook);
+        rook.MoveTo(Board.Instance.GetTile(rookToPos.x, rookToPos.y), true);
     }
 
     private void PromotePawn(Piece pawn)
