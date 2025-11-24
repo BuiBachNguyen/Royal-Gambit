@@ -242,7 +242,7 @@ public class BoardManager : MonoBehaviour
         if (selectedMove.IsEnPassant())
         {
             int dir = pickingPiece.Color == PlayerColor.White ? 1 : -1;
-            BoardPosition pawnPos = new BoardPosition(selectedMove.to.x + dir, selectedMove.to.y);
+            BoardPosition pawnPos = new BoardPosition(selectedMove.to.x - dir, selectedMove.to.y);
             Piece enPassantPawn = GetPieceAt(pawnPos);
             if (enPassantPawn != null)
             {
