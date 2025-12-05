@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class Knight : Piece
 {
-    public override List<Move> GeneratePseudoLegalMoves()
+    public override void GeneratePseudoLegalMoves(List<Move> moves)
     {
-        List<Move> result = new List<Move>();
+        BoardPosition currentPos = this.Pos;
+        PlayerColor pieceColor = this.color;
 
         int[] dx = { 2, 2, -2, -2, 1, 1, -1, -1 };
         int[] dy = { 1, -1, 1, -1, 2, -2, 2, -2 };
@@ -20,14 +21,12 @@ public class Knight : Piece
             
             if (targetPiece == null)
             {
-                result.Add(new Move(this.Pos, targetPos, MoveType.Normal));
+                moves.Add(new Move(currentPos, targetPos, MoveType.Normal));
             }
-            else if (targetPiece.Color != this.color)
+            else if (targetPiece.Color != pieceColor)
             {
-                result.Add(new Move(this.Pos, targetPos, MoveType.Capture, targetPiece));
+                moves.Add(new Move(currentPos, targetPos, MoveType.Capture, targetPiece));
             }
         }
-
-        return result;
     }
 }
