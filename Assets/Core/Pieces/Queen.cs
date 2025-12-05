@@ -1,16 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Queen : Piece
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void GeneratePseudoLegalMoves(List<Move> moves)
     {
-        
-    }
+        int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
+        int[] dy = { -1, 0, 1, -1, 1, -1, 0, 1 };
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        GetSlidingMoves(moves, dx, dy);
     }
 }

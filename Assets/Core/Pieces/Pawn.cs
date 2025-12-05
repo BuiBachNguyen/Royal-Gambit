@@ -1,91 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unity.Jobs;
 using UnityEngine;
 
 public class Pawn : Piece
 {
-    public override List<Move> GeneratePseudoLegalMoves()
+    public override void GeneratePseudoLegalMoves(List<Move> moves)
     {
-        List<Move> result = new List<Move>();
+        BoardPosition currentPos = this.Pos;
+        PlayerColor pieceColor = this.color;
 
-        int dir = (color == PlayerColor.White) ? 1 : -1;
+        int dir = (pieceColor == PlayerColor.White) ? 1 : -1;
 
-        // Di chuyển thẳng
-        BoardPosition forward = new BoardPosition(pos.x + dir, pos.y);
-        if (boardManager.GetPieceAt(forward) == null)
+        BoardPosition forward = new BoardPosition(currentPos.x + dir, currentPos.y);
+        if (forward.InBounds() && boardManager.GetPieceAt(forward) == null)
         { 
-            result.Add(new Move(this.Pos, forward, MoveType.Normal));
-            Debug.Log("forward");
+            moves.Add(new Move(currentPos, forward, MoveType.Normal));
         }    
 
-        // Nếu chưa đi → di chuyển 2 ô
         if (!hasMoved)
         {
-            BoardPosition twoStep = new BoardPosition(pos.x + 2 * dir, pos.y);
-            if (boardManager.GetPieceAt(forward) == null && boardManager.GetPieceAt(twoStep) == null)
-                result.Add(new Move(this.Pos, twoStep, MoveType.DoubleStep));
+            BoardPosition twoStep = new BoardPosition(currentPos.x + 2 * dir, currentPos.y);
+            if (twoStep.InBounds() && boardManager.GetPieceAt(forward) == null && boardManager.GetPieceAt(twoStep) == null)
+                moves.Add(new Move(currentPos, twoStep, MoveType.DoubleStep));
         }
 
-        // Ăn chéo
-        BoardPosition captureLeft = new BoardPosition(pos.x + dir, pos.y + 1);
-        BoardPosition captureRight = new BoardPosition(pos.x + dir, pos.y - 1);
+        BoardPosition captureLeft = new BoardPosition(currentPos.x + dir, currentPos.y + 1);
+        BoardPosition captureRight = new BoardPosition(currentPos.x + dir, currentPos.y - 1);
 
         if (captureLeft.InBounds())
         {
             Piece target = boardManager.GetPieceAt(captureLeft);
-            if (target != null && target.Color != color)
+            if (target != null && target.Color != pieceColor)
             {
-                result.Add(new Move(this.Pos, captureLeft, MoveType.Capture));
-                Debug.Log("LEFT");
+                moves.Add(new Move(currentPos, captureLeft, MoveType.Capture, target));
             }    
         }
 
         if (captureRight.InBounds())
         {
             Piece target = boardManager.GetPieceAt(captureRight);
-            if (target != null && target.Color != color)
+            if (target != null && target.Color != pieceColor)
             {
-                result.Add(new Move(this.Pos, captureRight, MoveType.Capture));
-                Debug.Log("RIGHT");
+                moves.Add(new Move(currentPos, captureRight, MoveType.Capture, target));
             }    
         }
         
-        //Bắt tốt qua đường
-        if (!((color == PlayerColor.White && pos.x == 4) || (color == PlayerColor.Black && pos.x == 3)))
-            return result; 
+        // En Passant Logic
+        if (!((pieceColor == PlayerColor.White && currentPos.x == 4) || (pieceColor == PlayerColor.Black && currentPos.x == 3)))
+            return; 
 
-        BoardPosition left = new BoardPosition(pos.x, pos.y + 1 * dir);
-        BoardPosition right = new BoardPosition(pos.x, pos.y - 1 * dir);
+        BoardPosition left = new BoardPosition(currentPos.x, currentPos.y + 1);
+        BoardPosition right = new BoardPosition(currentPos.x, currentPos.y - 1);
 
-        if (left.InBounds())
+        CheckEnPassant(left, dir, moves);
+        CheckEnPassant(right, dir, moves);
+    }
+
+    private void CheckEnPassant(BoardPosition neighborPos, int dir, List<Move> moves)
+    {
+        if (neighborPos.InBounds())
         {
-            Piece leftPiece = boardManager.GetPieceAt(left);
-            if (leftPiece is Pawn && leftPiece.Color != color && boardManager.LastMove != null)
+            Piece neighborPiece = boardManager.GetPieceAt(neighborPos);
+            if (neighborPiece is Pawn && neighborPiece.Color != this.color && boardManager.LastMove != null)
             {
                 Move last = boardManager.LastMove;
-                // Kiểm tra quân tốt bên cạnh vừa đi 2 ô
-                if (last.to.Equals(left) && last.moveType == MoveType.DoubleStep)
+                if (last.to.Equals(neighborPos) && last.moveType == MoveType.DoubleStep)
                 {
-                    // Nước đi bắt qua đường
-                    BoardPosition enPassantTarget = new BoardPosition(pos.x + dir, pos.y + 1 * dir);
-                    result.Add(new Move(this.Pos, enPassantTarget, MoveType.EnPassant));
+                    BoardPosition enPassantTarget = new BoardPosition(this.Pos.x + dir, neighborPos.y);
+                    moves.Add(new Move(this.Pos, enPassantTarget, MoveType.EnPassant));
                 }
             }
         }
-        if (right.InBounds())
-        {
-            Piece rightPiece = boardManager.GetPieceAt(right);
-            if (rightPiece is Pawn && rightPiece.Color != color && boardManager.LastMove != null)
-            {
-                Move last = boardManager.LastMove;
-                if (last.to.Equals(right) && last.moveType == MoveType.DoubleStep)
-                {
-                    BoardPosition enPassantTarget = new BoardPosition(pos.x + dir, pos.y - 1 * dir);
-                    result.Add(new Move(this.Pos, enPassantTarget, MoveType.EnPassant));
-                }
-            }
-        }
-        return result;
     }
 }

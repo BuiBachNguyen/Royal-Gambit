@@ -42,11 +42,11 @@ public class Board : MonoBehaviour
     }
     void GenerateBoard(BoardManager bm)
     {
-        board = new Tile[8, 8];
+        board = new Tile[BoardManager.BOARD_SIZE, BoardManager.BOARD_SIZE];
 
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < BoardManager.BOARD_SIZE; i++)
         {
-            for (int j = 0; j < 8; j++)
+            for (int j = 0; j < BoardManager.BOARD_SIZE; j++)
             {
                 Tile tile = Instantiate(tilePrefab, transform);
                 tile.Initialize(bm, new BoardPosition(i, j), null, TileStatus.NoAct);
@@ -73,27 +73,20 @@ public class Board : MonoBehaviour
     {
         ResetTiles();
 
-        if (moves == null)
-        {
-            return;
-        }
+        if (moves == null) return;
 
-        //moves != null
         foreach (var move in moves)
         {
-            //Limit border
-            if (move.to.x < 0 || move.to.x >= 8 || move.to.y < 0 || move.to.y >= 8)
-                continue;
-
+            if (!move.to.InBounds()) continue;
             board[move.to.x, move.to.y].ChangeStatus(tileStatus);
         }
     }
 
     public void ResetTiles()
     {
-        for(int i = 0;i < 8;i++)
+        for(int i = 0;i < BoardManager.BOARD_SIZE;i++)
         {
-            for(int j = 0; j < 8;j++)
+            for(int j = 0; j < BoardManager.BOARD_SIZE;j++)
             {
                 board[i, j].ChangeStatus(TileStatus.NoAct);
             }    
@@ -107,7 +100,7 @@ public class Board : MonoBehaviour
         string[] parts = fen.Split(' ');
         string boardData = parts[0];
 
-        int row = 7;
+        int row = BoardManager.BOARD_SIZE - 1;
         int col = 0;
 
         foreach (char c in boardData)

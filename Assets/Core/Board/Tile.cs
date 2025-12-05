@@ -12,7 +12,7 @@ public struct BoardPosition
 
     public BoardPosition(int x, int y) { this.x = x; this.y = y; }
 
-    public bool InBounds() => x >= 0 && x < 8 && y >= 0 && y < 8; // board 8x8 right?
+    public bool InBounds() => x >= 0 && x < BoardManager.BOARD_SIZE && y >= 0 && y < BoardManager.BOARD_SIZE;
 
     public static bool operator ==(BoardPosition a, BoardPosition b) => a.x == b.x && a.y == b.y;
     public static bool operator !=(BoardPosition a, BoardPosition b) => !(a == b);
