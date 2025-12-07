@@ -32,12 +32,16 @@ public abstract class Piece : MonoBehaviour, IPointerClickHandler
         get { return pos; }
         set { pos = value; }
     }
+    public bool HasMoved
+    {
+        get { return hasMoved; }
+        set { hasMoved = value; }
+    }    
     public bool IsOnClick
     {
         get { return isOnClick; }
         set { isOnClick = value; }
     }
-    public bool HasMoved => hasMoved;
     #endregion
 
 
@@ -100,4 +104,9 @@ public abstract class Piece : MonoBehaviour, IPointerClickHandler
             }
         }
     }
+}
+public enum PlayerColor
+{
+    Black,
+    White
 }

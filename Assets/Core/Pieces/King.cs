@@ -82,6 +82,7 @@ public class King : Piece
     private bool CheckQueenSideCastling(int row, PlayerColor pieceColor)
     {
         Piece rook = boardManager.GetPieceAt(new BoardPosition(row, 0));
+
         if (rook == null || rook is not Rook || rook.Color != pieceColor || rook.HasMoved)
             return false;
 

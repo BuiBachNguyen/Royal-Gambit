@@ -102,14 +102,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4292472561455509920, guid: fa5597634db440c4692e1d2098168ab4, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7459759547698773993}
+      addedObject: {fileID: 802591278578312429}
   m_SourcePrefab: {fileID: 100100000, guid: fa5597634db440c4692e1d2098168ab4, type: 3}
 --- !u!1 &7528015666200613688 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4292472561455509920, guid: fa5597634db440c4692e1d2098168ab4, type: 3}
   m_PrefabInstance: {fileID: 6046380818087813784}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7459759547698773993
+--- !u!114 &802591278578312429
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,13 +118,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7528015666200613688}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b22535894deca24e87471f9939f540b, type: 3}
+  m_Script: {fileID: 11500000, guid: 35c49a917acb17c40bb5aeeb3ec00a70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 1
+  color: 0
+  pieceType: 1
   tile: {fileID: 0}
   pos:
     x: 0
     y: 0
   hasMoved: 0
-  board: {fileID: 0}
+  boardManager: {fileID: 0}

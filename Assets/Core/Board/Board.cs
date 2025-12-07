@@ -55,7 +55,7 @@ public class Board : MonoBehaviour
         }
 
         //SpawnPieces();
-        LoadFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+        LoadFEN("RNBQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr w KQkq - 0 1");
     }
 
     void CreatePiece(PieceType type, PlayerColor color, int row, int col)
@@ -149,4 +149,14 @@ public class Board : MonoBehaviour
     }
 
 
+}
+
+public enum PieceType
+{
+    Pawn,
+    Rook,
+    Knight,
+    Bishop,
+    Queen,
+    King
 }
