@@ -18,12 +18,14 @@ public class Knight : Piece
             if (!targetPos.InBounds()) continue;
 
             Piece targetPiece = boardManager.GetPieceAt(targetPos);
-            
+
             if (targetPiece == null)
             {
                 moves.Add(new Move(currentPos, targetPos, MoveType.Normal));
             }
+
             else if (targetPiece.Color != pieceColor)
+
             {
                 moves.Add(new Move(currentPos, targetPos, MoveType.Capture, targetPiece));
             }
